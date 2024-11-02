@@ -1,0 +1,53 @@
+# Requisitos Fundamentais
+
+## Cadastro de Disciplinas
+- Nome da disciplina, código, ementa, carga horária, pré-requisitos, professor responsável.
+- Classificação por área de conhecimento, semestre e nível de graduação/pós-graduação.
+
+## Cadastro de Professores
+- Dados pessoais, titulação, área de atuação, disponibilidade horária.
+- Vinculação a disciplinas específicas.
+
+## Cadastro de Salas
+- Número da sala, capacidade, equipamentos disponíveis.
+
+## Criação de Turmas
+- Número de vagas, alunos matriculados, horários das aulas.
+
+## Geração de Grades Horárias
+- Distribuição das disciplinas em horários e salas, evitando conflitos de horários para alunos e professores.
+- Consideração de pré-requisitos e co-requisitos.
+
+## Visualização da Grade
+- Interface intuitiva para alunos e professores consultarem seus horários.
+- Possibilidade de filtrar por disciplina, professor, turma ou período.
+
+## Gerenciamento de Conflitos
+- Identificação automática de conflitos de horários e sugestões de soluções.
+- Ferramentas para ajuste manual da grade.
+
+## Relatórios
+- Geração de relatórios personalizados sobre a oferta de disciplinas, ocupação de salas, carga horária dos professores, etc.
+
+# Funcionalidades Essenciais
+
+## Cadastro e Edição
+- Permitir a inclusão, alteração e exclusão de disciplinas, professores, salas e turmas.
+
+## Geração Automática de Grades
+- Utilizar algoritmos para criar grades horárias otimizadas, considerando as restrições e preferências definidas.
+
+## Edição Manual de Grades
+- Permitir que o administrador faça ajustes finos na grade gerada automaticamente.
+
+## Gerenciamento de Conflitos
+- Identificar e resolver conflitos de horários de forma eficiente.
+
+## Visualização Personalizada
+- Oferecer diferentes visões da grade, como por aluno, por professor, por sala e por período.
+
+## Notificações
+- Enviar notificações por e-mail ou SMS sobre alterações na grade ou eventos importantes.
+
+## Histórico de Alterações
+- Manter um registro completo das modificações realizadas na grade.
