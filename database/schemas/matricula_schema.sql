@@ -13,6 +13,8 @@ INSERT INTO Centro (codigo_centro) VALUES
 CREATE TABLE Sala (
     centro VARCHAR(10) NOT NULL,
     numero INT NOT NULL,
+    capacidade_alunos TINYINT NOT NULL,
+    tipo ENUM('Laboratório', 'Sala'),
     PRIMARY KEY (centro, numero),
     FOREIGN KEY (centro) REFERENCES Centro(codigo_centro)
 );
@@ -26,6 +28,7 @@ CREATE TABLE Disciplina (
     PRIMARY KEY (codigo_disciplina)
 );
 
+-- Tabela Curso
 CREATE TABLE Curso (
     id INT NOT NULL AUTO_INCREMENT,
     nome VARCHAR(100) NOT NULL,
