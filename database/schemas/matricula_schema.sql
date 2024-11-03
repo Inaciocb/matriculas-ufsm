@@ -26,6 +26,7 @@ CREATE TABLE Disciplina (
     PRIMARY KEY (codigo_disciplina)
 );
 
+
 CREATE TABLE Professor (
     Matricula BIGINT NOT NULL,
     nome VARCHAR(100) NOT NULL,
@@ -49,11 +50,19 @@ CREATE TABLE Turma (
     codigo_disciplina VARCHAR(10) NOT NULL,
     Matricula_Professor BIGINT NOT NULL,
     Centro_Sala VARCHAR(10) NOT NULL,
+    
     Numero_Sala INT NOT NULL,
+    dia_semana ENUM('Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab', 'Dom') NOT NULL, 
+    hora_inicio TIME NOT NULL,   
+    hora_fim TIME NOT NULL,      
+    
     PRIMARY KEY (ano, semestre_turma, codigo_disciplina, Matricula_Professor),
     FOREIGN KEY (codigo_disciplina) REFERENCES Disciplina(codigo_disciplina),
     FOREIGN KEY (Matricula_Professor) REFERENCES Professor(Matricula),
-    FOREIGN KEY (Centro_Sala, Numero_Sala) REFERENCES Sala(centro, numero)
+    FOREIGN KEY (Centro_Sala, Numero_Sala) REFERENCES Sala(centro, numero),
+    CHECK (hora_inicio >= '07:30:00' AND hora_inicio <= '20:00:00'),
+    CHECK (hora_fim >= ADDTIME(hora_inicio, '01:00:00') AND hora_fim <= ADDTIME(hora_inicio, '04:00:00')),
+    CHECK (hora_fim <= '23:00:00')
 );
 
 CREATE TABLE Turma_Aluno (
@@ -66,19 +75,4 @@ CREATE TABLE Turma_Aluno (
     FOREIGN KEY (ano_turma, semestre_turma, codigo_disciplina) 
         REFERENCES Turma(ano, semestre_turma, codigo_disciplina),
     FOREIGN KEY (Matricula_Aluno) REFERENCES Aluno(matricula)
-);
-
-CREATE TABLE Horario (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    ano_turma YEAR NOT NULL,
-    semestre_turma ENUM ('1','2') NOT NULL,
-    codigo_disciplina VARCHAR(10) NOT NULL,
-    dia_semana ENUM('Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab', 'Dom') NOT NULL,
-    hora_inicio TIME NOT NULL,
-    hora_fim TIME NOT NULL,
-    FOREIGN KEY (ano_turma, semestre_turma, codigo_disciplina) 
-        REFERENCES Turma(ano, semestre_turma, codigo_disciplina),
-    CHECK (hora_inicio >= '07:30:00' AND hora_inicio <= '20:00:00'),
-    CHECK (hora_fim >= ADDTIME(hora_inicio, '01:00:00') AND hora_fim <= ADDTIME(hora_inicio, '04:00:00')),
-    CHECK (hora_fim <= '23:00:00')
 );
