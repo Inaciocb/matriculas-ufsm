@@ -26,6 +26,15 @@ CREATE TABLE Disciplina (
     PRIMARY KEY (codigo_disciplina)
 );
 
+CREATE TABLE Curso (
+    id INT NOT NULL AUTO_INCREMENT,
+    nome VARCHAR(100) NOT NULL,
+    campus VARCHAR(100) NOT NULL,
+    ementa VARCHAR(220),  -- URL da ementa
+    centro VARCHAR(10) NOT NULL,
+    PRIMARY KEY (id),
+    FOREIGN KEY (centro) REFERENCES Centro(codigo_centro)
+);
 
 CREATE TABLE Professor (
     Matricula BIGINT NOT NULL,
@@ -38,7 +47,9 @@ CREATE TABLE Professor (
 CREATE TABLE Aluno (
     matricula BIGINT NOT NULL,
     nome VARCHAR(100) NOT NULL,
-    PRIMARY KEY (matricula)
+    id_curso INT NOT NULL,  
+    PRIMARY KEY (matricula),
+    FOREIGN KEY (id_curso) REFERENCES Curso(id)
 );
 
 CREATE TABLE Turma (
@@ -50,12 +61,10 @@ CREATE TABLE Turma (
     codigo_disciplina VARCHAR(10) NOT NULL,
     Matricula_Professor BIGINT NOT NULL,
     Centro_Sala VARCHAR(10) NOT NULL,
-    
     Numero_Sala INT NOT NULL,
-    dia_semana ENUM('Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab', 'Dom') NOT NULL, 
-    hora_inicio TIME NOT NULL,   
-    hora_fim TIME NOT NULL,      
-    
+    dia_semana ENUM('Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab', 'Dom') NOT NULL,
+    hora_inicio TIME NOT NULL,
+    hora_fim TIME NOT NULL,
     PRIMARY KEY (ano, semestre_turma, codigo_disciplina, Matricula_Professor),
     FOREIGN KEY (codigo_disciplina) REFERENCES Disciplina(codigo_disciplina),
     FOREIGN KEY (Matricula_Professor) REFERENCES Professor(Matricula),
@@ -70,7 +79,7 @@ CREATE TABLE Turma_Aluno (
     semestre_turma ENUM ('1','2') NOT NULL,
     codigo_disciplina VARCHAR(10) NOT NULL,
     Matricula_Aluno BIGINT NOT NULL,
-    Matricula_Professor BIGINT NOT NULL, 
+    Matricula_Professor BIGINT NOT NULL,
     situacao_aluno ENUM('Matricula', 'Aprovado com nota', 'Reprovado por Frequência', 'Reprovado com Nota'),
     PRIMARY KEY (ano_turma, semestre_turma, codigo_disciplina, Matricula_Aluno),
     FOREIGN KEY (ano_turma, semestre_turma, codigo_disciplina, Matricula_Professor) 
