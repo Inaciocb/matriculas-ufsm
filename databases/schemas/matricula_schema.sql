@@ -70,9 +70,10 @@ CREATE TABLE Turma_Aluno (
     semestre_turma ENUM ('1','2') NOT NULL,
     codigo_disciplina VARCHAR(10) NOT NULL,
     Matricula_Aluno BIGINT NOT NULL,
+    Matricula_Professor BIGINT NOT NULL, 
     situacao_aluno ENUM('Matricula', 'Aprovado com nota', 'Reprovado por Frequência', 'Reprovado com Nota'),
     PRIMARY KEY (ano_turma, semestre_turma, codigo_disciplina, Matricula_Aluno),
-    FOREIGN KEY (ano_turma, semestre_turma, codigo_disciplina) 
-        REFERENCES Turma(ano, semestre_turma, codigo_disciplina),
+    FOREIGN KEY (ano_turma, semestre_turma, codigo_disciplina, Matricula_Professor) 
+        REFERENCES Turma(ano, semestre_turma, codigo_disciplina, Matricula_Professor),
     FOREIGN KEY (Matricula_Aluno) REFERENCES Aluno(matricula)
 );
