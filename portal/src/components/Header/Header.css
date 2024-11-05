@@ -1,0 +1,24 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: linear-gradient(to bottom, #01548b, #013659);
+  color: white;
+  padding: 10px 20px;
+}
+
+.header-left {
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+
+.header-right {
+  display: flex;
+  align-items: center;
+  font-size: 1rem;
+}
+
+.user-icon,
+.dropdown-icon {
+  margin: 0 5px;
+}
