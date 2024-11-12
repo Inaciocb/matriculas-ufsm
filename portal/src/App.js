@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Header from './components/Header/Header.js';
 import Accordion from './components/accordion/Accordion';
-import { FaArrowRight, FaTimes } from 'react-icons/fa';
+import { FaArrowRight, FaArrowLeft } from 'react-icons/fa';
 import './App.css';
 
 const subjectsBySemester = {
@@ -87,8 +87,11 @@ const subjectsBySemester = {
     { name: 'Tópicos Especiais em Linguagens Formais', code: 'DLSC812', hours: 15 },
   ],
 };
+
 function App() {
   const [selectedSubjects, setSelectedSubjects] = useState([]);
+  const [currentStep, setCurrentStep] = useState(1); // Controla a etapa atual
+  const [matriculaSolicitada, setMatriculaSolicitada] = useState(false); // Status de matrícula
 
   const handleSelectionChange = (subject) => {
     setSelectedSubjects((prevSelected) => {
@@ -107,44 +110,117 @@ function App() {
     );
   };
 
+  const handleNextStep = () => {
+    if (currentStep < 3) {
+      setCurrentStep(currentStep + 1);
+    } else {
+      // Confirmação da matrícula na última etapa
+      setMatriculaSolicitada(true);
+    }
+  };
+
+  const handlePreviousStep = () => {
+    if (currentStep > 1) setCurrentStep(currentStep - 1);
+  };
+
   return (
     <div className="App">
       <Header />
       <h1 className="nomeCurso">Bacharelado em Sistemas de Informação</h1>
-      <div className="container">
-        <div className="dropboxes">
-          {Object.entries(subjectsBySemester).map(([semester, subjects]) => (
-            <Accordion
-              key={semester}
-              title={semester}
-              subjects={subjects.map((s) => ({
-                ...s,
-                selected: selectedSubjects.some((sel) => sel.code === s.code),
-              }))}
-              onSelectionChange={handleSelectionChange}
-            />
-          ))}
-        </div>
-        <div className="selected-subjects">
-          <h2>Disciplinas Selecionadas</h2>
-          <ul>
-            {selectedSubjects.map((subject) => (
-              <li key={subject.code} className="selected-subject-item">
-                🠊 {subject.name} ({subject.code}) - {subject.hours}h
-                <button
-                  className="remove-button"
-                  onClick={() => handleRemoveSubject(subject.code)}
-                >
-                  <FaTimes />
-                </button>
-              </li>
+
+      {currentStep === 1 && (
+        <div className="container">
+          <div className="dropboxes">
+            {Object.entries(subjectsBySemester).map(([semester, subjects]) => (
+              <Accordion
+                key={semester}
+                title={semester}
+                subjects={subjects.map((s) => ({
+                  ...s,
+                  selected: selectedSubjects.some((sel) => sel.code === s.code),
+                }))}
+                onSelectionChange={handleSelectionChange}
+              />
             ))}
-          </ul>
+          </div>
+          <div className="selected-subjects">
+            <h2>Disciplinas Selecionadas</h2>
+            <ul>
+              {selectedSubjects.map((subject) => (
+                <li key={subject.code} className="selected-subject-item">
+                  🠊 {subject.name} ({subject.code}) - {subject.hours}h
+                  <button
+                    className="remove-button" 
+                    onClick={() => handleRemoveSubject(subject.code)}
+                  >✕
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>
         </div>
-      </div>
-      <div className="next-button-container">
-        <button className="next-button">
-          Avançar <FaArrowRight />
+      )}
+
+      {currentStep === 2 && (
+        <div className="container">
+          <div className="schedule-view">
+            <h2>Grade de Horários</h2>
+            <div className="weekly-schedule">
+              <p>Esta é uma visualização de como ficará a sua agenda semanal.</p>
+            </div>
+          </div>
+          <div className="selected-subjects">
+            <h2>Disciplinas Selecionadas</h2>
+            <ul>
+              {selectedSubjects.map((subject) => (
+                <li key={subject.code} className="selected-subject-item">
+                  🠊 {subject.name} ({subject.code}) - {subject.hours}h
+                  <button
+                    className="remove-button"
+                    onClick={() => handleRemoveSubject(subject.code)}
+                  >
+                    ✕
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      )}
+
+      {currentStep === 3 && (
+        <div className="container">
+          <div className="confirmation-view">
+            <h2>Confirmar Matrícula</h2>
+            <table className="confirmation-table">
+              <thead>
+                <tr>
+                  <th>Disciplina</th>
+                  <th>Estado da Solicitação</th>
+                </tr>
+              </thead>
+              <tbody>
+                {selectedSubjects.map((subject) => (
+                  <tr key={subject.code}>
+                    <td>{subject.name}</td>
+                    <td>{matriculaSolicitada ? "Matrícula Solicitada" : "Não Solicitada"}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        </div>
+      )}
+
+      {/* Botões de Navegação, sempre no mesmo lugar */}
+      <div className="navigation-buttons">
+        {currentStep > 1 && (
+          <button className="back-button" onClick={handlePreviousStep}>
+            <FaArrowLeft /> Voltar
+          </button>
+        )}
+        <button className="next-button" onClick={handleNextStep}>
+          {currentStep === 3 ? "Confirmar Matrícula" : "Avançar"} <FaArrowRight />
         </button>
       </div>
     </div>
