@@ -1,47 +1,44 @@
 .accordion {
     border: 1px solid #ccc;
     border-radius: 4px;
-}
-
-.accordion-header {
-display: flex;
-justify-content: space-between;
-align-items: center;
-padding: 5px;
-background-color: #f7f7f7;
-cursor: pointer;
-}
-
-.accordion-header h3 {
-margin: 0;
-font-size: 1.2rem;
-}
-
-.accordion-content {
-padding: 10px;
-background-color: #fff;
-}
-
-
-
-
-.subject-item {
-display: flex;
-align-items: center;
-padding: 8px;
-cursor: pointer;
-transition: background-color 0.2s;
-}
-
-.subject-item.even {
-background-color: #dcdbdb;
-}
-
-.subject-item.odd {
-background-color: #ffffff;
-}
-
-.subject-item label {
-margin-left: 8px;
-cursor: pointer;
-}
+    margin-bottom: 10px;
+  }
+  
+  .accordion-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 5px;
+    background-color: #f7f7f7;
+    cursor: pointer;
+  }
+  
+  .accordion-header h3 {
+    margin: 0;
+    font-size: 1.2rem;
+  }
+  
+  .accordion-content {
+    overflow: hidden;
+    transition: max-height 0.2s ease;
+  }
+  
+  .subject-item {
+    display: flex;
+    align-items: center;
+    padding: 8px;
+    cursor: pointer;
+  }
+  
+  .subject-item.even {
+    background-color: #d7d7d7;
+  }
+  
+  .subject-item.odd {
+    background-color: #ffffff;
+  }
+  .subject-item label {
+    margin-left: 8px;
+    cursor: pointer;
+  }
+  

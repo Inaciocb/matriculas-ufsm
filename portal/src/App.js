@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useState } from 'react';
 import Header from './components/Header/Header.js';
 import Accordion from './components/accordion/Accordion';
+import { FaArrowRight, FaTimes } from 'react-icons/fa';
 import './App.css';
 
 const subjectsBySemester = {
@@ -86,16 +87,65 @@ const subjectsBySemester = {
     { name: 'Tópicos Especiais em Linguagens Formais', code: 'DLSC812', hours: 15 },
   ],
 };
-
 function App() {
+  const [selectedSubjects, setSelectedSubjects] = useState([]);
+
+  const handleSelectionChange = (subject) => {
+    setSelectedSubjects((prevSelected) => {
+      const isSelected = prevSelected.some((s) => s.code === subject.code);
+      if (isSelected) {
+        return prevSelected.filter((s) => s.code !== subject.code);
+      } else {
+        return [...prevSelected, subject];
+      }
+    });
+  };
+
+  const handleRemoveSubject = (subjectCode) => {
+    setSelectedSubjects((prevSelected) =>
+      prevSelected.filter((subject) => subject.code !== subjectCode)
+    );
+  };
+
   return (
     <div className="App">
       <Header />
       <h1 className="nomeCurso">Bacharelado em Sistemas de Informação</h1>
-      <div className="dropboxes">
-        {Object.entries(subjectsBySemester).map(([semester, subjects]) => (
-          <Accordion key={semester} title={semester} subjects={subjects} />
-        ))}
+      <div className="container">
+        <div className="dropboxes">
+          {Object.entries(subjectsBySemester).map(([semester, subjects]) => (
+            <Accordion
+              key={semester}
+              title={semester}
+              subjects={subjects.map((s) => ({
+                ...s,
+                selected: selectedSubjects.some((sel) => sel.code === s.code),
+              }))}
+              onSelectionChange={handleSelectionChange}
+            />
+          ))}
+        </div>
+        <div className="selected-subjects">
+          <h2>Disciplinas Selecionadas</h2>
+          <ul>
+            {selectedSubjects.map((subject) => (
+              <li key={subject.code} className="selected-subject-item">
+                🠊 {subject.name} ({subject.code}) - {subject.hours}h
+                <button
+                  className="remove-button"
+                  onClick={() => handleRemoveSubject(subject.code)}
+                >
+                  <FaTimes />
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+      <div className="next-button-container">
+        <button className="next-button">
+          Avançar <FaArrowRight />
+        </button>
       </div>
     </div>
   );

@@ -1,20 +1,17 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
 import './Accordion.css';
 
-const Accordion = ({ title, subjects }) => {
+const Accordion = ({ title, subjects, onSelectionChange }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [selectedSubjects, setSelectedSubjects] = useState({});
+  const contentRef = useRef(null);
 
   const toggleAccordion = () => {
     setIsOpen(!isOpen);
   };
 
-  const handleCheckboxChange = (code) => {
-    setSelectedSubjects((prevState) => ({
-      ...prevState,
-      [code]: !prevState[code],
-    }));
+  const handleCheckboxChange = (subject) => {
+    onSelectionChange(subject);
   };
 
   return (
@@ -23,26 +20,30 @@ const Accordion = ({ title, subjects }) => {
         <h3>{title}</h3>
         {isOpen ? <FaChevronUp /> : <FaChevronDown />}
       </div>
-      {isOpen && (
-        <div className="accordion-content">
-          {subjects.map((subject, index) => (
-            <div
-              key={subject.code}
-              className={`subject-item ${index % 2 === 0 ? 'even' : 'odd'}`}
-              onClick={() => handleCheckboxChange(subject.code)}
-            >
-              <input
-                type="checkbox"
-                checked={!!selectedSubjects[subject.code]}
-                onChange={() => handleCheckboxChange(subject.code)}
-              />
-              <label>
-                {subject.name} ({subject.code}) - {subject.hours}h
-              </label>
-            </div>
-          ))}
-        </div>
-      )}
+      <div
+        ref={contentRef}
+        className="accordion-content"
+        style={{
+          maxHeight: isOpen ? `${contentRef.current.scrollHeight}px` : '0px',
+        }}
+      >
+        {subjects.map((subject, index) => (
+          <div
+            key={subject.code}
+            className={`subject-item ${index % 2 === 0 ? 'even' : 'odd'}`}
+            onClick={() => handleCheckboxChange(subject)}
+          >
+            <input
+              type="checkbox"
+              checked={!!subject.selected}
+              onChange={() => handleCheckboxChange(subject)}
+            />
+            <label>
+              {subject.name} ({subject.code}) - {subject.hours}h
+            </label>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };

@@ -1,4 +1,3 @@
-// src/Header.js
 import React from 'react';
 import { FaUserCircle } from 'react-icons/fa';
 import { MdArrowDropDown } from 'react-icons/md';
