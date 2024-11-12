@@ -20,3 +20,23 @@ CREATE VIEW DisciplinasDoDia AS
 SELECT d.nome AS disciplina, t.dia_semana, t.hora_inicio, t.hora_fim
 FROM Turma t
 JOIN Disciplina d ON t.codigo_disciplina = d.codigo_disciplina;
+
+
+CREATE VIEW Disciplinas_Aprovadas AS
+SELECT DISTINCT Disciplina.codigo_disciplina, Disciplina.nome, Turma_Aluno.Matricula_Aluno
+FROM Turma_Aluno
+JOIN Disciplina ON Turma_Aluno.codigo_disciplina = Disciplina.codigo_disciplina
+WHERE Turma_Aluno.situacao_aluno = 'Aprovado com nota';
+-- Para utilizar a view:  SELECT codigo_disciplina, nome FROM Disciplinas_Aprovadas WHERE Matricula_Aluno = ?; -- 
+
+
+CREATE VIEW Disciplinas_Disponiveis AS
+SELECT Disciplina.codigo_disciplina, Disciplina.nome
+FROM Disciplina
+WHERE Disciplina.codigo_disciplina NOT IN (
+    SELECT codigo_disciplina
+    FROM Turma_Aluno
+    WHERE Matricula_Aluno = ?
+      AND situacao_aluno = 'Aprovado com nota'
+);
+-- Para utilizar a view:   SELECT codigo_disciplina, nome FROM Disciplinas_Disponiveis WHERE Matricula_Aluno = ?;
