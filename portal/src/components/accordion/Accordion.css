@@ -41,4 +41,15 @@
     margin-left: 8px;
     cursor: pointer;
   }
+
+  .class-options-container {
+    display: flex;
+    flex-direction: column;
+    gap: 10px; /* Adiciona espaçamento entre as opções */
+    padding: 10px;
+    border: 1px solid #ccc; /* Exemplo de borda */
+    border-radius: 5px;
+    background-color: #f9f9f9; /* Cor de fundo */
+  }
+  
   

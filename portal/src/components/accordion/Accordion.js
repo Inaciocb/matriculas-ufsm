@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react';
 import { FaChevronDown, FaChevronUp } from 'react-icons/fa';
 import './Accordion.css';
 
-const Accordion = ({ title, subjects, onSelectionChange }) => {
+const Accordion = ({ title, subjects, onSelectionChange, onClassSelection, selectedClasses = {} }) => {
   const [isOpen, setIsOpen] = useState(false);
   const contentRef = useRef(null);
 
@@ -11,6 +11,7 @@ const Accordion = ({ title, subjects, onSelectionChange }) => {
   };
 
   const handleCheckboxChange = (subject) => {
+    console.log('Checkbox clicada para:', subject); // Verificação de chamada
     onSelectionChange(subject);
   };
 
@@ -28,19 +29,45 @@ const Accordion = ({ title, subjects, onSelectionChange }) => {
         }}
       >
         {subjects.map((subject, index) => (
-          <div
-            key={subject.code}
-            className={`subject-item ${index % 2 === 0 ? 'even' : 'odd'}`}
-            onClick={() => handleCheckboxChange(subject)}
-          >
+          <div key={subject.code} className={`subject-item ${index % 2 === 0 ? 'even' : 'odd'}`}>
             <input
               type="checkbox"
               checked={!!subject.selected}
-              onChange={() => handleCheckboxChange(subject)}
+              onChange={() => handleCheckboxChange(subject)} // Usando onChange para capturar mudanças na checkbox
             />
             <label>
               {subject.name} ({subject.code}) - {subject.hours}h
             </label>
+
+            {/* Mostrar opções de turmas se a disciplina estiver selecionada */}
+            {subject.selected && subject.classes && subject.classes.length > 0 && (
+              <div className="class-options-container">
+                <p>Opções de Turmas para {subject.name}:</p>
+                <div className="class-options">
+                  {subject.classes.map((classItem) => (
+                    <div
+                      key={classItem.name}
+                      className={`class-option ${selectedClasses[subject.code]?.name === classItem.name ? 'selected' : ''} additional-class`}
+                      onClick={() => {
+                        console.log(`Selecionando classe para ${subject.code}:`, classItem);
+                        onClassSelection(subject.code, classItem);
+                      }}
+                    >
+                      <p>Turma: {classItem.name}</p>
+                      <p>Docente: {classItem.teacher}</p>
+                      <p>
+                        Horários:{' '}
+                        {classItem.schedule
+                          .map(
+                            (schedule) => `${schedule.day} ${schedule.start} - ${schedule.end}`
+                          )
+                          .join(', ')}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </div>
         ))}
       </div>

@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import Header from './components/Header/Header.js';
 import Accordion from './components/accordion/Accordion';
+import SchedulePage from './components/SchedulePage/SchedulePage';
 import { FaArrowRight, FaTimes } from 'react-icons/fa';
 import './App.css';
 
@@ -38,11 +39,63 @@ const subjectsBySemester = {
     { name: 'Sistemas Operacionais A', code: 'ELC1080', hours: 60 },
   ],
   "5º Semestre": [
-    { name: 'Custos A', code: 'CTB1074', hours: 60 },
-    { name: 'Interface Humano-Computador', code: 'ELC1072', hours: 60 },
-    { name: 'Projeto e Gerência de Banco de Dados', code: 'ELC1071', hours: 60 },
-    { name: 'Qualidade de Software', code: 'ELC133', hours: 60 },
-  ],
+  {
+    name: 'Custos A',
+    code: 'CTB1074',
+    hours: 60,
+    classes: [
+      {
+        name: 'T.10',
+        schedule: [
+          { day: 'SEG', start: '13:30', end: '16:30' }
+        ],
+        teacher: 'LEONARDO MICHELOTTI'
+      }
+    ]
+  },
+  {
+    name: 'Interface Humano-Computador',
+    code: 'ELC1072',
+    hours: 60,
+    classes: [
+      {
+        name: 'T.20',
+        schedule: [
+          { day: 'TER', start: '10:30', end: '12:30' }
+        ],
+        teacher: 'FELIPE BECKER NUNES'
+      }
+    ]
+  },
+  {
+    name: 'Projeto e Gerência de Banco de Dados',
+    code: 'ELC1071',
+    hours: 60,
+    classes: [
+      {
+        name: 'T.30',
+        schedule: [
+          { day: 'QUA', start: '08:30', end: '10:30' }
+        ],
+        teacher: 'ANA SILVA'
+      }
+    ]
+  },
+  {
+    name: 'Qualidade de Software',
+    code: 'ELC133',
+    hours: 60,
+    classes: [
+      {
+        name: 'T.40',
+        schedule: [
+          { day: 'QUI', start: '14:00', end: '16:00' }
+        ],
+        teacher: 'MARCOS SANTOS'
+      }
+    ]
+  }
+],
   "6º Semestre": [
     { name: 'Empreendedorismo B', code: 'CAD1044', hours: 60 },
     { name: 'Projeto de Software I', code: 'ELC1073', hours: 120 },
@@ -87,8 +140,13 @@ const subjectsBySemester = {
     { name: 'Tópicos Especiais em Linguagens Formais', code: 'DLSC812', hours: 15 },
   ],
 };
+
 function App() {
+  
   const [selectedSubjects, setSelectedSubjects] = useState([]);
+  const [selectedClasses, setSelectedClasses] = useState({});
+  const [showSchedulePage, setShowSchedulePage] = useState(false);
+  const [subjectsForSchedulePage, setSubjectsForSchedulePage] = useState([]);
 
   const handleSelectionChange = (subject) => {
     setSelectedSubjects((prevSelected) => {
@@ -96,16 +154,47 @@ function App() {
       if (isSelected) {
         return prevSelected.filter((s) => s.code !== subject.code);
       } else {
-        return [...prevSelected, subject];
+        return [...prevSelected, { ...subject, selected: true }];
       }
     });
   };
+  const handleClassSelection = (subjectCode, classItem) => {
+    console.log('Classe selecionada:', subjectCode, classItem); // Verificação
+    setSelectedClasses(prevSelectedClasses => ({
+      ...prevSelectedClasses,
+      [subjectCode]: classItem,
+    }));
+  
+    // Verifique se `selectedSubjects` está sendo atualizado corretamente
+    console.log('Updated selectedClasses:', selectedClasses);
+  };
+  
 
   const handleRemoveSubject = (subjectCode) => {
     setSelectedSubjects((prevSelected) =>
       prevSelected.filter((subject) => subject.code !== subjectCode)
     );
+    
+
+    const { [subjectCode]: removedClass, ...rest } = selectedClasses;
+    setSelectedClasses(rest);
   };
+
+  const handleNextPage = () => {
+    
+    const subjectsWithSelectedClasses = selectedSubjects.map((subject) => ({
+      ...subject,
+      selected: true,
+      selectedClass: selectedClasses[subject.code] || null,
+    }));
+    
+    setSubjectsForSchedulePage(subjectsWithSelectedClasses);
+    setShowSchedulePage(true);
+  };
+
+  if (showSchedulePage) {
+    return <SchedulePage selectedSubjects={subjectsForSchedulePage} />;
+  }
 
   return (
     <div className="App">
@@ -122,6 +211,9 @@ function App() {
                 selected: selectedSubjects.some((sel) => sel.code === s.code),
               }))}
               onSelectionChange={handleSelectionChange}
+              onClassSelection={handleClassSelection}
+              selectedClasses={selectedClasses}
+              
             />
           ))}
         </div>
@@ -143,7 +235,7 @@ function App() {
         </div>
       </div>
       <div className="next-button-container">
-        <button className="next-button">
+        <button className="next-button" onClick={handleNextPage}>
           Avançar <FaArrowRight />
         </button>
       </div>

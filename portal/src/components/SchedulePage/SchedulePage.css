@@ -1,0 +1,35 @@
+.schedule-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+}
+
+.schedule-table th,
+.schedule-table td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: center;
+}
+
+.schedule-cell {
+  height: 60px;
+  position: relative;
+}
+
+.subject-block {
+  padding: 5px;
+  margin: 5px 0;
+  color: white;
+  border-radius: 5px;
+  text-align: center;
+}
+
+.legend {
+  margin-top: 20px;
+}
+
+.legend-item {
+  padding: 5px;
+  border-left: 5px solid;
+  margin: 5px 0;
+}
