@@ -5,11 +5,7 @@ CREATE TABLE Centro (
     codigo_centro VARCHAR(10) NOT NULL,
     PRIMARY KEY (codigo_centro)
 );
-INSERT INTO Centro (codigo_centro) VALUES 
-    ('CAL'), ('CCNE'), ('CCR'), ('CCS'),
-    ('CCSH'), ('CE'), ('CEFD'), ('CT'),
-    ('CTISM'), ('POLI'), ('CS'), ('FW'), ('PM');
-  
+
 CREATE TABLE Sala (
     centro VARCHAR(10) NOT NULL,
     numero INT NOT NULL,
@@ -28,12 +24,11 @@ CREATE TABLE Disciplina (
     PRIMARY KEY (codigo_disciplina)
 );
 
--- Tabela Curso
 CREATE TABLE Curso (
     id INT NOT NULL AUTO_INCREMENT,
     nome VARCHAR(100) NOT NULL,
     campus VARCHAR(100) NOT NULL,
-    ementa VARCHAR(220),  -- URL da ementa
+    ementa VARCHAR(220),
     centro VARCHAR(10) NOT NULL,
     PRIMARY KEY (id),
     FOREIGN KEY (centro) REFERENCES Centro(codigo_centro)
@@ -56,6 +51,7 @@ CREATE TABLE Aluno (
 );
 
 CREATE TABLE Turma (
+    id_turma VARCHAR(7) NOT NULL,
     ano YEAR NOT NULL,
     semestre_turma ENUM('1','2') NOT NULL,
     N_vagas INT,
@@ -63,14 +59,16 @@ CREATE TABLE Turma (
     data_fim DATE,
     codigo_disciplina VARCHAR(10) NOT NULL,
     Matricula_Professor BIGINT NOT NULL,
+    id_curso INT NOT NULL,
     Centro_Sala VARCHAR(10) NOT NULL,
     Numero_Sala INT NOT NULL,
     dia_semana ENUM('Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab', 'Dom') NOT NULL,
     hora_inicio TIME NOT NULL,
     hora_fim TIME NOT NULL,
-    PRIMARY KEY (ano, semestre_turma, codigo_disciplina, Matricula_Professor),
+    PRIMARY KEY (id_turma),
     FOREIGN KEY (codigo_disciplina) REFERENCES Disciplina(codigo_disciplina),
     FOREIGN KEY (Matricula_Professor) REFERENCES Professor(Matricula),
+    FOREIGN KEY (id_curso) REFERENCES Curso(id),
     FOREIGN KEY (Centro_Sala, Numero_Sala) REFERENCES Sala(centro, numero),
     CHECK (hora_inicio >= '07:30:00' AND hora_inicio <= '20:00:00'),
     CHECK (hora_fim >= ADDTIME(hora_inicio, '01:00:00') AND hora_fim <= ADDTIME(hora_inicio, '04:00:00')),
@@ -78,14 +76,10 @@ CREATE TABLE Turma (
 );
 
 CREATE TABLE Turma_Aluno (
-    ano_turma YEAR NOT NULL,
-    semestre_turma ENUM ('1','2') NOT NULL,
-    codigo_disciplina VARCHAR(10) NOT NULL,
+    id_turma VARCHAR(7) NOT NULL,
     Matricula_Aluno BIGINT NOT NULL,
-    Matricula_Professor BIGINT NOT NULL,
     situacao_aluno ENUM('Matricula', 'Aprovado com nota', 'Reprovado por Frequência', 'Reprovado com Nota'),
-    PRIMARY KEY (ano_turma, semestre_turma, codigo_disciplina, Matricula_Aluno),
-    FOREIGN KEY (ano_turma, semestre_turma, codigo_disciplina, Matricula_Professor) 
-        REFERENCES Turma(ano, semestre_turma, codigo_disciplina, Matricula_Professor),
+    PRIMARY KEY (id_turma, Matricula_Aluno),
+    FOREIGN KEY (id_turma) REFERENCES Turma(id_turma),
     FOREIGN KEY (Matricula_Aluno) REFERENCES Aluno(matricula)
 );

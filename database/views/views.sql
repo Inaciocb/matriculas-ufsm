@@ -8,12 +8,8 @@ SELECT
     t.hora_fim
 FROM Aluno a
 JOIN Turma_Aluno ta ON a.matricula = ta.Matricula_Aluno
-JOIN Turma t ON ta.ano_turma = t.ano 
-              AND ta.semestre_turma = t.semestre_turma 
-              AND ta.codigo_disciplina = t.codigo_disciplina 
-              AND ta.Matricula_Professor = t.Matricula_Professor
+JOIN Turma t ON ta.id_turma = t.id_turma
 JOIN Disciplina d ON t.codigo_disciplina = d.codigo_disciplina;
-
 
 -- Para usar a view abaixo: SELECT * FROM TurmasDoProfessor WHERE matricula_professor = ?;
 CREATE VIEW TurmasDoProfessor AS
@@ -27,8 +23,7 @@ FROM Professor p
 JOIN Turma t ON p.Matricula = t.Matricula_Professor
 JOIN Disciplina d ON t.codigo_disciplina = d.codigo_disciplina;
 
-
--- para consultar por um dia específico -> SELECT * FROM DisciplinasDoDia WHERE dia_semana = ?; 
+-- Para consultar por um dia específico: SELECT * FROM DisciplinasDoDia WHERE dia_semana = ?;
 CREATE VIEW DisciplinasDoDia AS
 SELECT 
     d.nome AS disciplina, 

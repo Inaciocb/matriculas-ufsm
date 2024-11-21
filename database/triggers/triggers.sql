@@ -8,7 +8,7 @@ BEGIN
         SELECT 1
         FROM Turma_Aluno
         WHERE Matricula_Aluno = NEW.Matricula_Aluno
-          AND codigo_disciplina = NEW.codigo_disciplina
+          AND id_turma = NEW.id_turma
           AND situacao_aluno = 'Aprovado com nota'
     ) THEN
         SIGNAL SQLSTATE '45000' 
