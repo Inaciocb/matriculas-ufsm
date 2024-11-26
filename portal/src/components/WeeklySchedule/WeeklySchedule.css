@@ -1,0 +1,80 @@
+.weekly-schedule {
+    display: grid;
+    grid-template-columns: 80px repeat(7, 1fr); 
+    grid-template-rows: auto 1fr;
+    gap: 1px;
+    border: 1px solid #ccc;
+    background-color: #f9f9f9;
+  }
+  
+  .schedule-header {
+    display: contents;
+  }
+  
+  .time-header {
+    grid-column: 1 / 2;
+  }
+  
+  .day-header {
+    background-color: #004793a3;
+    color: white;
+    text-align: center;
+    padding: 3px; 
+    font-size: 0.9rem; 
+  }
+  
+  .schedule-grid {
+    display: contents;
+  }
+  
+  .time-label {
+    text-align: center;
+    padding: 6px;
+    border-right: 1px solid #ddd;
+    font-size: 0.85rem; 
+  }
+  
+  .schedule-cell {
+    position: relative;
+    height: 33px; 
+    width: 130px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+  }
+  
+  .schedule-slot {
+    display: flex;
+    height: 100%;
+  }
+  
+  .subject-block {
+    background-color: rgba(0, 95, 196, 0.83);
+    color: white;
+    padding: 2px; 
+    font-size: 0.8rem; 
+    text-align: center;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    border: 1px solid #0056b3;
+    cursor: pointer;
+  }
+  
+  .subject-block:hover {
+    background-color: rgba(0, 123, 255, 0.9);
+  }
+  
+  [data-tooltip]:hover:after {
+    content: attr(data-tooltip);
+    position: absolute;
+    top: -5px;
+    left: 105%;
+    background-color: black;
+    color: white;
+    padding: 5px;
+    font-size: 0.8rem; /* Tooltip menor */
+    border-radius: 3px;
+    white-space: pre-wrap;
+    z-index: 10;
+  }
+  
