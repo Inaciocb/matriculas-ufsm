@@ -19,8 +19,8 @@ function SimularMatricula() {
   useEffect(() => {
     async function fetchData() {
       try {
-        const turmasResponse = await axios.get('http://localhost:3000/turmas');
-        const disciplinasResponse = await axios.get('http://localhost:3000/disciplinas');
+        const turmasResponse = await axios.get('http://localhost:3001/turmas');
+        const disciplinasResponse = await axios.get('http://localhost:3001/disciplinas');
         
         const turmas = Array.isArray(turmasResponse.data) ? turmasResponse.data : [];
         const disciplinas = Array.isArray(disciplinasResponse.data) ? disciplinasResponse.data : [];

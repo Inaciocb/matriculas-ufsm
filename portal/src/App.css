@@ -75,3 +75,24 @@
 .next-button svg, .back-button svg {
   margin-left: 8px;
 }
+
+input, select, textarea {
+  width: 100%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-size: 1rem;
+  box-sizing: border-box;
+}
+
+input:focus, select:focus, textarea:focus {
+  border-color: #01548b;
+  outline: none;
+  box-shadow: 0 0 5px rgba(1, 84, 139, 0.5);
+}
+
+textarea {
+  height: 100px;
+  resize: none;
+}
