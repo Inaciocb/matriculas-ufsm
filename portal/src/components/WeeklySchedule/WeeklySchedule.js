@@ -6,11 +6,20 @@ const days = ["Seg", "Ter", "Qua", "Qui", "Sex", "Sab", "Dom"];
 
 const WeeklySchedule = ({ subjects }) => {
   const renderSubjects = (day, time) => {
-    const filteredSubjects = subjects.filter((subject) =>
-      subject.days.includes(day) &&
-      time >= subject.startTime &&
-      time < subject.endTime
-    );
+    const filteredSubjects = subjects.filter((subject) => {
+      // Garantir que o campo 'days' e os horários não sejam undefined
+      if (!subject.horarios || subject.horarios.length === 0) {
+        return false;
+      }
+      
+      // Filtrar horários para o dia específico
+      return subject.horarios.some(
+        (horario) =>
+          horario.dia_semana === day &&
+          time >= horario.hora_inicio &&
+          time < horario.hora_fim
+      );
+    });
 
     if (filteredSubjects.length === 0) return null;
 
@@ -18,14 +27,19 @@ const WeeklySchedule = ({ subjects }) => {
       <div className="schedule-slot">
         {filteredSubjects.map((subject, index) => (
           <div
-            key={`${subject.code}-${index}`}
+            key={`${subject.id_turma}-${index}`}
             className="subject-block"
             style={{
               width: `${100 / filteredSubjects.length}%`,
             }}
-            data-tooltip={`Nome: ${subject.name}\nHorário: ${subject.startTime}-${subject.endTime}\nDias: ${subject.days.join(", ")}`}
+            data-tooltip={`Nome: ${subject.nome_disciplina}\nHorário: ${subject.horarios
+              .map(
+                (h) =>
+                  `${h.dia_semana}: ${h.hora_inicio} - ${h.hora_fim}`
+              )
+              .join("\n")}`}
           >
-            {subject.name}
+            {subject.nome_disciplina}
           </div>
         ))}
       </div>
