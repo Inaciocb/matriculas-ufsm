@@ -7,12 +7,10 @@ const days = ["Seg", "Ter", "Qua", "Qui", "Sex", "Sab", "Dom"];
 const WeeklySchedule = ({ subjects }) => {
   const renderSubjects = (day, time) => {
     const filteredSubjects = subjects.filter((subject) => {
-      // Garantir que o campo 'days' e os horários não sejam undefined
       if (!subject.horarios || subject.horarios.length === 0) {
         return false;
       }
       
-      // Filtrar horários para o dia específico
       return subject.horarios.some(
         (horario) =>
           horario.dia_semana === day &&
