@@ -2,6 +2,7 @@ import React from "react";
 import { BrowserRouter as Router, Routes, Route, Link } from "react-router-dom";
 import SimularMatricula from "./pages/SimularMatricula"; // Importando o arquivo de simulação de matrícula
 import SimularCadastro from "./pages/SimularCadastro"; // Componente de placeholder
+import SimularCadastroTurma from "./pages/SimularCadastroTurma";
 
 function App() {
   return (
@@ -10,6 +11,7 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/matricula" element={<SimularMatricula />} />
         <Route path="/cadastro" element={<SimularCadastro />} />
+        <Route path="/cadastroTurma" element={<SimularCadastroTurma />} />
       </Routes>
     </Router>
   );
@@ -25,6 +27,9 @@ const Home = () => {
           <button style={buttonStyle}>Simular Matrícula</button>
         </Link>
         <Link to="/cadastro">
+          <button style={buttonStyle}>Simular Cadastro de Turmas</button>
+        </Link>
+        <Link to="/cadastroTurma">
           <button style={buttonStyle}>Simular Cadastro de Turmas</button>
         </Link>
       </div>
