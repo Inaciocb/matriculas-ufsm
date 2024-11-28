@@ -6,11 +6,6 @@ CREATE TABLE Centro (
     PRIMARY KEY (codigo_centro)
 );
 
-INSERT INTO Centro (codigo_centro) VALUES 
-    ('CAL'), ('CCNE'), ('CCR'), ('CCS'),
-    ('CCSH'), ('CE'), ('CEFD'), ('CT'),
-    ('CTISM'), ('POLI'), ('CS'), ('FW'), ('PM');
-
 CREATE TABLE Sala (
     centro VARCHAR(10) NOT NULL,
     numero INT NOT NULL,
@@ -97,31 +92,44 @@ CREATE TABLE Turma_Aluno (
     FOREIGN KEY (Matricula_Aluno) REFERENCES Aluno(matricula)
 );
 
-INSERT INTO Professor (Matricula, nome, centro) VALUES
-    (111111111, 'Luis Alvaro Silva', 'CT'),
-    (222222222, 'Sergio Luis Sardi Mergen', 'CT'),
-    (333333333, 'Giliane Bernardi', 'CT'),
-    (444444444, 'Paulo Cesar Barbosa', 'CT');
-    
+
+-- Inserir dados na tabela Centro
+INSERT INTO Centro (codigo_centro) VALUES 
+    ('CAL'), ('CCNE'), ('CCR'), ('CCS'),
+    ('CCSH'), ('CE'), ('CEFD'), ('CT'),
+    ('CTISM'), ('POLI'), ('CS'), ('FW'), ('PM');
+
+-- Inserir dados na tabela Sala
+INSERT INTO Sala (centro, numero, capacidade_alunos, tipo) VALUES
+    ('CT', 161, 40, 'Sala'),
+    ('CT', 334, 40, 'Sala');
+
+-- Inserir dados na tabela Curso
 INSERT INTO Curso (id, nome, campus, ementa, centro) VALUES
     (1, 'Bacharelado em Sistemas de Informação', 'Campus Principal', NULL, 'CT');
-   
+
+-- Inserir dados na tabela Disciplina
 INSERT INTO Disciplina (codigo_disciplina, nome, semestre_disciplina, ementa, carga_horaria, id_curso) VALUES
     ('CTB1074', 'Custos A', 5, NULL, 60, 1),
     ('ELC1072', 'Interface Humano-Computador', 5, NULL, 60, 1),
     ('ELC1071', 'Projeto e Gerência de Banco de Dados', 5, NULL, 60, 1),
     ('ELC133', 'Qualidade de Software', 5, NULL, 60, 1);
 
-INSERT INTO Sala (centro, numero, capacidade_alunos, tipo) VALUES
-    ('CT', 161, 40, 'Sala'),
-    ('CT', 334, 40, 'Sala');
-    
+-- Inserir dados na tabela Professor
+INSERT INTO Professor (Matricula, nome, centro) VALUES
+    (111111111, 'Luis Alvaro Silva', 'CT'),
+    (222222222, 'Sergio Luis Sardi Mergen', 'CT'),
+    (333333333, 'Giliane Bernardi', 'CT'),
+    (444444444, 'Paulo Cesar Barbosa', 'CT');
+
+-- Inserir dados na tabela Turma
 INSERT INTO Turma (id_turma, ano, semestre_turma, N_vagas, data_inicio, data_fim, codigo_disciplina, Matricula_Professor, id_curso, Centro_Sala, Numero_Sala) VALUES
     ('TPGBD1', 2024, '2', 40, '2024-09-01', '2024-12-15', 'ELC1071', 222222222, 1, 'CT', 334),
     ('TQUAL1', 2024, '2', 40, '2024-09-01', '2024-12-15', 'ELC133', 111111111, 1, 'CT', 161),
     ('TIHC1', 2024, '2', 40, '2024-09-01', '2024-12-15', 'ELC1072', 333333333, 1, 'CT', 161),
     ('TCUST1', 2024, '2', 40, '2024-09-01', '2024-12-15', 'CTB1074', 444444444, 1, 'CT', 161);
 
+-- Inserir dados na tabela Turma_Horarios
 INSERT INTO Turma_Horarios (id_turma, dia_semana, hora_inicio, hora_fim) VALUES
     ('TPGBD1', 'Seg', '08:30:00', '10:30:00'),
     ('TPGBD1', 'Qua', '08:30:00', '10:30:00'),
@@ -132,9 +140,10 @@ INSERT INTO Turma_Horarios (id_turma, dia_semana, hora_inicio, hora_fim) VALUES
     ('TCUST1', 'Ter', '10:30:00', '12:30:00'),
     ('TCUST1', 'Sex', '10:30:00', '12:30:00');
 
--- Inserindo o aluno Inácio Camargo Buemo
+-- Inserir aluno
 INSERT INTO Aluno (matricula, nome, id_curso) VALUES
     (202220097, 'Inácio Camargo Buemo', 1);
+
 
 DELIMITER $$
 
@@ -150,10 +159,6 @@ BEGIN
       AND ta.situacao_aluno = 'Aprovado com nota';
 END $$
 
-DELIMITER ;
-
-DELIMITER $$
-
 CREATE PROCEDURE GetDisciplinasDisponiveis (IN Matricula BIGINT)
 BEGIN
     SELECT 
@@ -165,13 +170,9 @@ BEGIN
         FROM Turma_Aluno ta
         JOIN Turma t ON ta.id_turma = t.id_turma
         WHERE ta.Matricula_Aluno = Matricula
-          AND ta.situacao_aluno = 'Aprovado com nota'
+          AND ta.situacao_aluno in ('Aprovado com nota', 'Matricula', 'Matricula Solicitada')
     );
 END $$
-
-DELIMITER ;
-
-DELIMITER $$
 
 CREATE PROCEDURE SalasLivres(
     IN p_centro VARCHAR(10),
@@ -191,10 +192,6 @@ BEGIN
     WHERE s.centro = p_centro
       AND th.id_turma IS NULL;  
 END $$
-
-DELIMITER ;
-
-DELIMITER $$
 
 CREATE PROCEDURE HorariosDisponiveisSemestre(
     IN p_semestre TINYINT,
@@ -228,25 +225,6 @@ END $$
 
 DELIMITER ;
 
-DELIMITER $$
-
-CREATE TRIGGER impedir_matricula_duplicada
-BEFORE INSERT ON Turma_Aluno
-FOR EACH ROW
-BEGIN
-    IF EXISTS (
-        SELECT 1
-        FROM Turma_Aluno
-        WHERE Matricula_Aluno = NEW.Matricula_Aluno
-          AND id_turma = NEW.id_turma
-          AND situacao_aluno IN ('Aprovado com nota', 'Matricula', 'Matricula Solicitada')
-    ) THEN
-        SIGNAL SQLSTATE '45000' 
-        SET MESSAGE_TEXT = 'Matrícula não permitida: já existe uma matrícula ou solicitação para essa disciplina.';
-    END IF;
-END $$
-
-DELIMITER ;
 
 CREATE VIEW TurmasDoAluno AS
 SELECT 
@@ -284,3 +262,43 @@ SELECT
 FROM Turma t
 JOIN Disciplina d ON t.codigo_disciplina = d.codigo_disciplina
 JOIN Turma_Horarios th ON t.id_turma = th.id_turma;
+
+
+DELIMITER $$
+
+DELIMITER //
+
+CREATE TRIGGER impedir_horario_conflitante
+BEFORE INSERT ON Turma_Horarios
+FOR EACH ROW
+BEGIN
+    DECLARE conflito INT;
+
+    SELECT COUNT(*)
+    INTO conflito
+    FROM Turma_Horarios TH
+    JOIN Turma T_EXISTENTE ON TH.id_turma = T_EXISTENTE.id_turma
+    JOIN Turma T_NOVA ON NEW.id_turma = T_NOVA.id_turma
+    WHERE 
+        TH.dia_semana = NEW.dia_semana
+        AND (
+            (NEW.hora_inicio < TH.hora_fim AND NEW.hora_fim > TH.hora_inicio)
+        )
+        AND T_EXISTENTE.semestre_turma = T_NOVA.semestre_turma
+        AND T_EXISTENTE.ano = T_NOVA.ano
+        AND T_EXISTENTE.codigo_disciplina != T_NOVA.codigo_disciplina;
+
+    IF conflito > 0 THEN
+        SIGNAL SQLSTATE '45000'
+        SET MESSAGE_TEXT = 'Conflito de horário detectado: duas disciplinas diferentes não podem ocupar o mesmo horário no mesmo semestre.';
+    END IF;
+END;
+//
+
+DELIMITER ;
+
+
+
+
+
+
