@@ -47,7 +47,8 @@
   margin-top: 20px;
 }
 
-.next-button {
+.next-button,
+.back-button {
   display: flex;
   align-items: center;
   padding: 0.8rem 1rem;
@@ -57,26 +58,22 @@
   border-radius: 0.4rem;
   font-size: 1.2rem;
   cursor: pointer;
-  margin-right: 2%;
+  transition: background-color 0.3s ease;
 }
 
-.back-button{
-  padding: 0.8rem 1rem;
-  background: linear-gradient(to bottom, #01548b, #013659);
-  color: white;
-  border: none;
-  border-radius: 0.4rem;
-  font-size: 1.2rem;
-  cursor: pointer;
-  margin-right: 1%;
-
+.next-button:hover,
+.back-button:hover {
+  background-color: #001123;
 }
 
-.next-button svg, .back-button svg {
+.next-button svg,
+.back-button svg {
   margin-left: 8px;
 }
 
-input, select, textarea {
+input,
+select,
+textarea {
   width: 100%;
   padding: 10px;
   margin: 10px 0;
@@ -86,7 +83,9 @@ input, select, textarea {
   box-sizing: border-box;
 }
 
-input:focus, select:focus, textarea:focus {
+input:focus,
+select:focus,
+textarea:focus {
   border-color: #01548b;
   outline: none;
   box-shadow: 0 0 5px rgba(1, 84, 139, 0.5);
@@ -119,17 +118,34 @@ form {
   flex: 1;
 }
 
-.next-button {
-  align-self: flex-end;
-  padding: 10px 20px;
-  font-size: 1rem;
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
+.next-button:hover {
+  background-color: #001123;
 }
 
-.next-button:hover {
-  background-color: #0056b3;
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .dropboxes,
+  .selected-subjects {
+    width: 100%;
+    margin-left: 0;
+  }
+
+  .navigation-buttons {
+    justify-content: center;
+  }
+}
+input[type="checkbox"] {
+  width: auto; 
+  height: auto; 
+  margin: 0 8px; 
+  cursor: pointer; 
+}
+
+input[type="checkbox"]:focus {
+  outline: 2px solid #01548b; 
+  outline-offset: 2px;
 }

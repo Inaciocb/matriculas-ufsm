@@ -31,15 +31,15 @@ const Accordion = ({ title, subjects, onSelectionChange }) => {
           <div
             key={subject.code}
             className={`subject-item ${index % 2 === 0 ? 'even' : 'odd'}`}
-            onClick={() => handleCheckboxChange(subject)}
+            onClick={() => handleCheckboxChange(subject)} 
           >
             <input
               type="checkbox"
               checked={!!subject.selected}
-              onChange={() => handleCheckboxChange(subject)}
+              readOnly 
             />
             <label>
-              {subject.name} ({subject.code}) - {subject.hours}h
+              {subject.nome} ({subject.code}) - {subject.hours || 'N/A'}h
             </label>
           </div>
         ))}

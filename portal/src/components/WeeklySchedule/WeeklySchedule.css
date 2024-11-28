@@ -36,16 +36,20 @@
   
   .schedule-cell {
     position: relative;
-    height: 33px; 
-    width: 130px;
+    height: 30px; 
+    width: 90px;
     background-color: #fff;
     border: 1px solid #ddd;
   }
   
   .schedule-slot {
     display: flex;
+    flex-wrap: wrap; 
     height: 100%;
+    align-items: center;
+    justify-content: space-evenly;
   }
+  
   
   .subject-block {
     background-color: rgba(0, 95, 196, 0.83);
@@ -72,7 +76,7 @@
     background-color: black;
     color: white;
     padding: 5px;
-    font-size: 0.8rem; /* Tooltip menor */
+    font-size: 0.8rem; 
     border-radius: 3px;
     white-space: pre-wrap;
     z-index: 10;
