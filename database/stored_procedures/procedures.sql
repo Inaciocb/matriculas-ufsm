@@ -23,7 +23,7 @@ BEGIN
         FROM Turma_Aluno ta
         JOIN Turma t ON ta.id_turma = t.id_turma
         WHERE ta.Matricula_Aluno = Matricula
-          AND ta.situacao_aluno not in ('Aprovado com nota', 'Matricula', 'Matricula Solicitada')
+          AND ta.situacao_aluno in ('Aprovado com nota', 'Matricula', 'Matricula Solicitada')
     );
 END $$
 
