@@ -266,7 +266,7 @@ JOIN Turma_Horarios th ON t.id_turma = th.id_turma;
 
 DELIMITER $$
 
-DELIMITER //
+DELIMITER $$
 
 CREATE TRIGGER impedir_horario_conflitante
 BEFORE INSERT ON Turma_Horarios
@@ -293,7 +293,7 @@ BEGIN
         SET MESSAGE_TEXT = 'Conflito de horário detectado: duas disciplinas diferentes não podem ocupar o mesmo horário no mesmo semestre.';
     END IF;
 END;
-//
+$$
 
 DELIMITER ;
 
