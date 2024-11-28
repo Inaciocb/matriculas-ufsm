@@ -28,7 +28,7 @@ function SimularMatricula() {
   const formatTurmasBySemester = (turmas) => {
     const groupedBySemester = {};
     turmas.forEach((turma) => {
-      const { semestre_disciplina, codigo_disciplina, nome_disciplina } = turma;
+      const { semestre_disciplina, codigo_disciplina, nome_disciplina, carga_horaria } = turma;
 
       if (!groupedBySemester[semestre_disciplina]) {
         groupedBySemester[semestre_disciplina] = [];
@@ -42,6 +42,7 @@ function SimularMatricula() {
         disciplina = {
           codigo: codigo_disciplina,
           nome: nome_disciplina,
+          carga_horaria: carga_horaria,
           turmas: [],
         };
         groupedBySemester[semestre_disciplina].push(disciplina);

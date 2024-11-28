@@ -10,6 +10,10 @@ const hours = Array.from({ length: 32 }, (_, i) => {
 const days = ["Seg", "Ter", "Qua", "Qui", "Sex", "Sab", "Dom"];
 
 const WeeklySchedule = ({ subjects }) => {
+
+  console.log('------------ AGENDA ------------')
+  console.log(subjects)
+
   const renderSubjects = (day, time) => {
     const filteredSubjects = subjects.filter((subject) => {
       if (!subject.horarios || subject.horarios.length === 0) return false;
