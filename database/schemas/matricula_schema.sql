@@ -6,11 +6,6 @@ CREATE TABLE Centro (
     PRIMARY KEY (codigo_centro)
 );
 
-INSERT INTO Centro (codigo_centro) VALUES 
-    ('CAL'), ('CCNE'), ('CCR'), ('CCS'),
-    ('CCSH'), ('CE'), ('CEFD'), ('CT'),
-    ('CTISM'), ('POLI'), ('CS'), ('FW'), ('PM');
-
 CREATE TABLE Sala (
     centro VARCHAR(10) NOT NULL,
     numero INT NOT NULL,
@@ -69,14 +64,20 @@ CREATE TABLE Turma (
     id_curso INT NOT NULL,
     Centro_Sala VARCHAR(10) NOT NULL,
     Numero_Sala INT NOT NULL,
-    dia_semana ENUM('Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab', 'Dom') NOT NULL,
-    hora_inicio TIME NOT NULL,
-    hora_fim TIME NOT NULL,
     PRIMARY KEY (id_turma),
     FOREIGN KEY (codigo_disciplina) REFERENCES Disciplina(codigo_disciplina),
     FOREIGN KEY (Matricula_Professor) REFERENCES Professor(Matricula),
     FOREIGN KEY (id_curso) REFERENCES Curso(id),
-    FOREIGN KEY (Centro_Sala, Numero_Sala) REFERENCES Sala(centro, numero),
+    FOREIGN KEY (Centro_Sala, Numero_Sala) REFERENCES Sala(centro, numero)
+);
+
+CREATE TABLE Turma_Horarios (
+    id_turma VARCHAR(7) NOT NULL,
+    dia_semana ENUM('Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab', 'Dom') NOT NULL,
+    hora_inicio TIME NOT NULL,
+    hora_fim TIME NOT NULL,
+    PRIMARY KEY (id_turma, dia_semana, hora_inicio),
+    FOREIGN KEY (id_turma) REFERENCES Turma(id_turma),
     CHECK (hora_inicio >= '07:30:00' AND hora_inicio <= '20:00:00'),
     CHECK (hora_fim >= ADDTIME(hora_inicio, '01:00:00') AND hora_fim <= ADDTIME(hora_inicio, '04:00:00')),
     CHECK (hora_fim <= '23:00:00')

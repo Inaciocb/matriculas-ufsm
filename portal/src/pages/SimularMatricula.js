@@ -27,15 +27,17 @@ function SimularMatricula() {
           const disciplina = disciplinas.find(
             (d) => d.codigo_disciplina === turma.disciplina
           );
-  
+        
           return {
             id: turma.id,
             nome: disciplina ? disciplina.nome : turma.disciplina,
             code: turma.disciplina,
             semestre: disciplina ? disciplina.semestre_disciplina : "N/A",
-            horarios: [], 
+            horarios: [],
+            cargaHoraria: disciplina ? disciplina.carga_horaria : "N/A", // Inclui a carga horária
           };
         });
+        
   
         
         const groupedBySemester = subjects.reduce((acc, subject) => {

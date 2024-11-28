@@ -39,8 +39,9 @@ const Accordion = ({ title, subjects, onSelectionChange }) => {
               readOnly 
             />
             <label>
-              {subject.nome} ({subject.code}) - {subject.hours || 'N/A'}h
+              {subject.nome} ({subject.code}) - {subject.cargaHoraria}h
             </label>
+
           </div>
         ))}
       </div>
