@@ -82,6 +82,28 @@ function SimularMatricula() {
     setCurrentStep((prevStep) => Math.max(prevStep - 1, 1));
   };
 
+  const handleConfirmMatricula = () => {
+    // Suponha que você faça uma chamada para a API para confirmar a matrícula
+    axios
+      .post("http://localhost:3001/matricula/confirmar", {
+        matriculaAluno,
+        turmas: selectedSubjects.map((subject) => ({
+          id_turma: subject.id_turma,
+          estado: "Solicitada", // Atualizando o estado para "Solicitada"
+        })),
+      })
+      .then((response) => {
+        // Atualiza o estado de todas as disciplinas para "Solicitada"
+        setSelectedSubjects((prevSubjects) =>
+          prevSubjects.map((subject) => ({
+            ...subject,
+            estadoSolicitacao: "Solicitada",
+          }))
+        );
+      })
+      .catch((error) => console.error("Erro ao confirmar matrícula:", error));
+  };
+
   return (
     <div className="App">
       <Header />
@@ -136,13 +158,14 @@ function SimularMatricula() {
             </thead>
             <tbody>
               {selectedSubjects.map((subject) => (
-                <tr key={subject.codigo}>
-                  <td>{subject.nome}</td>
-                  <td>Não Solicitada</td>
+                <tr key={subject.id_turma}>
+                  <td>{subject.nome_disciplina}</td>
+                  <td>{subject.estadoSolicitacao || "Não Solicitada"}</td>
                 </tr>
               ))}
             </tbody>
           </table>
+          <button onClick={handleConfirmMatricula}>Confirmar Matrícula</button>
         </div>
       )}
 

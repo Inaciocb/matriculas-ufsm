@@ -149,3 +149,18 @@ input[type="checkbox"]:focus {
   outline: 2px solid #01548b; 
   outline-offset: 2px;
 }
+
+.horarios-list {
+  margin-left: 20px;
+  margin-top: 5px;
+}
+
+.horarios-list ul {
+  list-style-type: disc;
+  padding-left: 20px;
+}
+
+.horarios-list li {
+  font-size: 14px;
+  line-height: 1.5;
+}

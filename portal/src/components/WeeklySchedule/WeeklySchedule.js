@@ -10,29 +10,21 @@ const hours = Array.from({ length: 32 }, (_, i) => {
 const days = ["Seg", "Ter", "Qua", "Qui", "Sex", "Sab", "Dom"];
 
 const WeeklySchedule = ({ subjects }) => {
-
-  console.log('------------ AGENDA ------------')
-  console.log(subjects)
-
   const renderSubjects = (day, time) => {
     const filteredSubjects = subjects.filter((subject) => {
-      if (!subject.horarios || subject.horarios.length === 0) return false;
-
       return subject.horarios.some((horario) => {
-        if (!horario.dia || !horario.inicio || !horario.fim) return false;
+        const [startHour, startMinute] = horario.hora_inicio.split(":").map(Number);
+        const [endHour, endMinute] = horario.hora_fim.split(":").map(Number);
 
-        const [hour, minute] = time.split(":").map(Number);
-        const [startHour, startMinute] = horario.inicio.split(":").map(Number);
-        const [endHour, endMinute] = horario.fim.split(":").map(Number);
-
-        const timeInMinutes = hour * 60 + minute;
-        const startTimeInMinutes = startHour * 60 + startMinute;
-        const endTimeInMinutes = endHour * 60 + endMinute;
+        const [currentHour, currentMinute] = time.split(":").map(Number);
+        const currentMinutes = currentHour * 60 + currentMinute;
+        const startMinutes = startHour * 60 + startMinute;
+        const endMinutes = endHour * 60 + endMinute;
 
         return (
-          horario.dia.toLowerCase() === day.toLowerCase() &&
-          timeInMinutes >= startTimeInMinutes &&
-          timeInMinutes < endTimeInMinutes
+          horario.dia_semana.toLowerCase() === day.toLowerCase() &&
+          currentMinutes >= startMinutes &&
+          currentMinutes < endMinutes
         );
       });
     });
@@ -43,19 +35,16 @@ const WeeklySchedule = ({ subjects }) => {
       <div className="schedule-slot">
         {filteredSubjects.map((subject, index) => (
           <div
-            key={`${subject.id}-${index}`}
+            key={`${subject.id_turma}-${index}`}
             className="subject-block"
-            style={{
-              width: `${100 / filteredSubjects.length}%`,
-            }}
-            data-tooltip={`Nome: ${subject.nome}\nHorário: ${subject.horarios
+            title={`Disciplina: ${subject.nome_disciplina}\nTurma: ${subject.id_turma}\nSala: ${subject.Numero_Sala}\nHorário: ${subject.horarios
               .map(
                 (h) =>
-                  `${h.dia || "N/A"}: ${h.inicio || "N/A"} - ${h.fim || "N/A"}`
+                  `${h.dia_semana}: ${h.hora_inicio} - ${h.hora_fim}`
               )
               .join("\n")}`}
           >
-            {subject.nome}
+            {subject.nome_disciplina}
           </div>
         ))}
       </div>
@@ -78,7 +67,9 @@ const WeeklySchedule = ({ subjects }) => {
             <div className="time-label">{hour}</div>
             {days.map((day) => (
               <div key={`${day}-${hour}`} className="schedule-cell">
-                {renderSubjects(day, hour)}
+                <div className="schedule-slot">
+                  {renderSubjects(day, hour)}
+                </div>
               </div>
             ))}
           </React.Fragment>
