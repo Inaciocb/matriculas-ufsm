@@ -84,3 +84,88 @@
 .input-professor {
     width: 200px !important;
   }
+=======
+  display: flex;
+  justify-content: space-between;
+}
+
+.dropboxes {
+  width: 50%;
+  padding-left: 25px;
+  box-sizing: border-box;
+}
+
+.selected-subjects {
+  width: 45%;
+  padding: 10px;
+  background-color: #ebebeb;
+  border-left: 2px solid #717171;
+  box-sizing: border-box;
+  font-size: 23px;
+  display: flex;
+  flex-direction: column;
+  margin-left: 3%;
+}
+
+.selected-subjects h2 {
+  margin-top: 0;
+}
+
+.selected-subject-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.remove-button {
+  background: none;
+  border: none;
+  color: #d70000;
+  font-size: 1.8rem;
+  cursor: pointer;
+  margin-left: 10px;
+}
+
+.navigation-buttons {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 20px;
+}
+
+.next-button, .back-button {
+  display: flex;
+  align-items: center;
+  padding: 0.8rem 1rem;
+  background: linear-gradient(to bottom, #01548b, #013659);
+  color: white;
+  border: none;
+  border-radius: 0.4rem;
+  font-size: 1.2rem;
+  font-weight: bold;
+  cursor: pointer;
+  margin-right: 1%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3); 
+  transition: background-color 0.3s ease; 
+}
+
+.next-button:hover, .back-button:hover {
+  background: linear-gradient(to bottom, #027bb5, #01548b); 
+}
+
+.next-button svg, .back-button svg {
+  margin-left: 8px;
+}
+
+.filter-bar {
+  margin: 10px 0;
+  text-align: center;
+}
+
+.filter-input {
+  padding: 5px;
+  width: 300px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+}
