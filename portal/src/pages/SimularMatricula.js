@@ -58,12 +58,10 @@ function SimularMatricula() {
 
   const handleSelectionChange = (turmaSelecionada) => {
     setSelectedSubjects((prevSelected) => {
-      // Remove apenas turmas da mesma disciplina
       const updatedSubjects = prevSelected.filter(
         (s) => s.disciplina.codigo !== turmaSelecionada.disciplina.codigo
       );
   
-      // Adiciona a nova turma selecionada
       return [...updatedSubjects, turmaSelecionada];
     });
   };
@@ -83,17 +81,17 @@ function SimularMatricula() {
   };
 
   const handleConfirmMatricula = () => {
-    // Suponha que você faça uma chamada para a API para confirmar a matrícula
+    const alunoMatricula = matriculaAluno;
+  
+    const matriculas = selectedSubjects.map((subject) => ({
+      turma: subject.id_turma,
+      aluno: alunoMatricula,
+      situacao: "Matricula Solicitada",
+    }));
+  
     axios
-      .post("http://localhost:3001/matricula/confirmar", {
-        matriculaAluno,
-        turmas: selectedSubjects.map((subject) => ({
-          id_turma: subject.id_turma,
-          estado: "Solicitada", // Atualizando o estado para "Solicitada"
-        })),
-      })
+      .post("http://localhost:3001/turmas-alunos", matriculas)
       .then((response) => {
-        // Atualiza o estado de todas as disciplinas para "Solicitada"
         setSelectedSubjects((prevSubjects) =>
           prevSubjects.map((subject) => ({
             ...subject,
@@ -101,8 +99,10 @@ function SimularMatricula() {
           }))
         );
       })
-      .catch((error) => console.error("Erro ao confirmar matrícula:", error));
-  };
+      .catch((error) => {
+        console.error("Erro ao confirmar matrícula:", error);
+      });
+  };  
 
   return (
     <div className="App">
