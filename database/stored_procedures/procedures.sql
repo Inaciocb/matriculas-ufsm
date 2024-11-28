@@ -27,7 +27,8 @@ BEGIN
     );
 END $$
 
-CREATE PROCEDURE GetDisciplinasDisponiveisProfessor (IN Matricula BIGINT, IN Professor BIGINT)
+create
+    definer = feather@`%` procedure GetDisciplinasDisponiveisProfessor(IN Matricula bigint, IN Professor bigint)
 BEGIN
     SELECT
         d.codigo_disciplina,
@@ -40,8 +41,15 @@ BEGIN
         WHERE ta.Matricula_Aluno = Matricula
           AND t.Matricula_Professor = Professor
           AND ta.situacao_aluno in ('Aprovado com nota', 'Matricula', 'Matricula Solicitada')
+    )
+      AND d.codigo_disciplina IN (
+        SELECT t.codigo_disciplina
+        FROM Turma t
+        WHERE t.Matricula_Professor = Professor
     );
-END $$
+END;
+
+
 
 CREATE PROCEDURE SalasLivres(
     IN p_centro VARCHAR(10),

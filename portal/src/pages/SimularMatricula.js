@@ -8,10 +8,12 @@ import "../App.css";
 
 function SimularMatricula() {
   const [selectedSubjects, setSelectedSubjects] = useState([]);
-  const [currentStep, setCurrentStep] = useState(1); 
+  const [currentStep, setCurrentStep] = useState(1);
   const [currentDate, setCurrentDate] = useState(new Date());
   const [subjectsBySemester, setSubjectsBySemester] = useState({});
   const [availableTurmas, setAvailableTurmas] = useState([]);
+  const [showProfessorInput, setShowProfessorInput] = useState(false);
+  const [professorMatricula, setProfessorMatricula] = useState("");
 
   const matriculaAluno = '123';
 
@@ -25,10 +27,11 @@ function SimularMatricula() {
       .catch((error) => console.error("Erro ao buscar turmas:", error));
   }, []);
 
-  const formatTurmasBySemester = (turmas) => {
+  let formatTurmasBySemester = (turmas) => {
     const groupedBySemester = {};
+    console.log(turmas)
     turmas.forEach((turma) => {
-      const { semestre_disciplina, codigo_disciplina, nome_disciplina, carga_horaria } = turma;
+      const { semestre_disciplina, codigo_disciplina, nome_disciplina, carga_horaria, nome_professor } = turma;
 
       if (!groupedBySemester[semestre_disciplina]) {
         groupedBySemester[semestre_disciplina] = [];
@@ -44,6 +47,7 @@ function SimularMatricula() {
           nome: nome_disciplina,
           carga_horaria: carga_horaria,
           turmas: [],
+          professor: nome_professor,
         };
         groupedBySemester[semestre_disciplina].push(disciplina);
       }
@@ -61,7 +65,7 @@ function SimularMatricula() {
       const updatedSubjects = prevSelected.filter(
         (s) => s.disciplina.codigo !== turmaSelecionada.disciplina.codigo
       );
-  
+
       return [...updatedSubjects, turmaSelecionada];
     });
   };
@@ -82,13 +86,13 @@ function SimularMatricula() {
 
   const handleConfirmMatricula = () => {
     const alunoMatricula = matriculaAluno;
-  
+
     const matriculas = selectedSubjects.map((subject) => ({
       turma: subject.id_turma,
       aluno: alunoMatricula,
       situacao: "Matricula Solicitada",
     }));
-  
+
     axios
       .post("http://localhost:3001/turmas-alunos", matriculas)
       .then((response) => {
@@ -102,13 +106,53 @@ function SimularMatricula() {
       .catch((error) => {
         console.error("Erro ao confirmar matrícula:", error);
       });
-  };  
+  };
+
+  const toggleProfessorInput = () => {
+    setShowProfessorInput(!showProfessorInput);
+  };
+
+  const handleProfessorMatriculaChange = (event) => {
+    if (event.target.value !== "") {
+      setSubjectsBySemester({});
+      axios.get(`http://localhost:3001/turmas/disponiveis/${matriculaAluno}/por-professor/${event.target.value}`)
+          .then((response) => {
+            const formattedData = formatTurmasBySemester(response.data);
+            setSubjectsBySemester(formattedData);
+          })
+          .catch((error) => console.error("Erro ao buscar turmas:", error));
+    } else {
+      setSubjectsBySemester({});
+      axios.get(`http://localhost:3001/turmas/disponiveis/${matriculaAluno}`)
+          .then((response) => {
+            const formattedData = formatTurmasBySemester(response.data);
+            setSubjectsBySemester(formattedData);
+          })
+          .catch((error) => console.error("Erro ao buscar turmas:", error));
+    }
+  };
 
   return (
     <div className="App">
       <Header />
       <h1 className="nomeCurso">Bacharelado em Sistemas de Informação</h1>
 
+      {currentStep === 1 && (
+          <div style={{width: '500px', margin: '15px 0', height: '50px'}}>
+            <button onClick={toggleProfessorInput}>
+              Filtrar por Professor
+            </button>
+            {showProfessorInput && (
+                <input style={{width: '200px', margin: '0 10px'}}
+                    type="text"
+                    value={professorMatricula}
+                       onChange={(event) => setProfessorMatricula(event.target.value)}
+                   onBlur={handleProfessorMatriculaChange}
+                    placeholder="Matrícula do Professor"
+                />
+            )}
+          </div>
+      )}
       {currentStep === 1 && (
         <div className="container">
           <div className="dropboxes">
