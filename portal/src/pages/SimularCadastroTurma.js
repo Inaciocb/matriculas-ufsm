@@ -81,7 +81,7 @@ const CadastroTurma = () => {
     axios
       .post("http://localhost:3001/turmas", novaTurma)
       .then(() => alert("Turma cadastrada com sucesso!"))
-      .catch((error) => console.error("Erro ao cadastrar turma:", error));
+      .catch((error) => alert("Erro ao cadastrar turma:", error));
   };
 
   return (
