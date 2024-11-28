@@ -45,25 +45,28 @@ const Accordion = ({
             </h4>
             <div className="turmas-list">
               {subject.turmas.map((turma) => (
-                <div key={turma.id_turma} className="turma-item">
-                  <label>
-                    <input
-                      type="checkbox"
-                      checked={isTurmaSelected(turma, subject)}
-                      onChange={() => handleCheckboxChange(turma, subject)}
-                    />
-                    Turma: {turma.id_turma} | Sala: {turma.Numero_Sala}
-                  </label>
-                  <div className="horarios-list">
-                    <ul>
-                      {turma.horarios.map((horario, index) => (
-                        <li key={index}>
-                          {horario.dia_semana}: {horario.hora_inicio} - {horario.hora_fim}
-                        </li>
-                      ))}
-                    </ul>
+                  <div>
+                  <div key={turma.id_turma} className="turma-item">
+                    <label>
+                      <input
+                          type="checkbox"
+                          checked={isTurmaSelected(turma, subject)}
+                          onChange={() => handleCheckboxChange(turma, subject)}
+                      />
+                      Turma: {turma.id_turma} | Sala: {turma.Numero_Sala}
+                    </label>
+                    <div className="horarios-list">
+                      <ul>
+                        {turma.horarios.map((horario, index) => (
+                            <li key={index}>
+                              {horario.dia_semana}: {horario.hora_inicio} - {horario.hora_fim}
+                            </li>
+                        ))}
+                      </ul>
+                    </div>
                   </div>
-                </div>
+                    <span>{turma.Matricula_Professor} - {turma.nome_professor}</span>
+                  </div>
               ))}
             </div>
           </div>

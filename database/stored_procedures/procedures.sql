@@ -27,6 +27,30 @@ BEGIN
     );
 END $$
 
+create
+    definer = feather@`%` procedure GetDisciplinasDisponiveisProfessor(IN Matricula bigint, IN Professor bigint)
+BEGIN
+    SELECT
+        d.codigo_disciplina,
+        d.nome
+    FROM Disciplina d
+    WHERE d.codigo_disciplina NOT IN (
+        SELECT t.codigo_disciplina
+        FROM Turma_Aluno ta
+                 JOIN Turma t ON ta.id_turma = t.id_turma
+        WHERE ta.Matricula_Aluno = Matricula
+          AND t.Matricula_Professor = Professor
+          AND ta.situacao_aluno in ('Aprovado com nota', 'Matricula', 'Matricula Solicitada')
+    )
+      AND d.codigo_disciplina IN (
+        SELECT t.codigo_disciplina
+        FROM Turma t
+        WHERE t.Matricula_Professor = Professor
+    );
+END;
+
+
+
 CREATE PROCEDURE SalasLivres(
     IN p_centro VARCHAR(10),
     IN p_dia_semana ENUM('Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab', 'Dom'),
