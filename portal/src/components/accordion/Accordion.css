@@ -1,44 +1,72 @@
 .accordion {
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    margin-bottom: 0.5%;
-  }
-  
-  .accordion-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 5px;
-    background-color: #f7f7f7;
-    cursor: pointer;
-  }
-  
-  .accordion-header h3 {
-    margin: 0;
-    font-size: 1.2rem;
-  }
-  
-  .accordion-content {
-    overflow: hidden;
-    transition: max-height 0.2s ease;
-  }
-  
-  .subject-item {
-    display: flex;
-    align-items: center;
-    padding: 8px;
-    cursor: pointer;
-  }
-  
-  .subject-item.even {
-    background-color: #d7d7d7;
-  }
-  
-  .subject-item.odd {
-    background-color: #ffffff;
-  }
-  .subject-item label {
-    margin-left: 8px;
-    cursor: pointer;
-  }
-  
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-bottom: 0.5%;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.accordion-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px;
+  background-color: #f7f7f7;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.accordion-header:hover {
+  background-color: #e0e0e0;
+}
+
+.accordion-header h3 {
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+.accordion-content {
+  overflow: hidden;
+  transition: max-height 0.3s ease;
+  padding: 10px;
+}
+
+.subject-group {
+  margin-bottom: 15px;
+}
+
+.subject-name {
+  font-size: 1.1rem;
+  margin-bottom: 8px;
+  font-weight: bold;
+  color: #333;
+}
+
+.turmas-list {
+  margin-left: 20px;
+  margin-top: 5px;
+}
+
+.turma-item {
+  display: flex;
+  align-items: center; /* Alinha checkbox e texto na mesma linha */
+  margin-bottom: 5px;
+  padding: 5px; /* Adiciona espaçamento interno */
+  font-size: 0.9rem;
+  color: #555;
+  border-radius: 4px;
+}
+
+.turma-item:hover {
+  background-color: #f9f9f9;
+}
+
+.turma-item input[type="checkbox"] {
+  margin-right: 10px; /* Espaçamento ajustado entre checkbox e texto */
+  transform: scale(1.2); /* Aumenta ligeiramente o tamanho do checkbox */
+}
+
+.turma-item label {
+  margin: 0;
+  line-height: 1.4;
+  cursor: pointer; /* Adiciona uma aparência clicável */
+}
