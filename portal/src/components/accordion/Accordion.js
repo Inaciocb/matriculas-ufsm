@@ -40,18 +40,30 @@ const Accordion = ({
       >
         {subjects.map((subject) => (
           <div key={subject.codigo} className="subject-group">
-            <h4 className="subject-name">{subject.nome}</h4>
+            <h4 className="subject-name">
+              {subject.nome} | {subject.codigo} | {subject.carga_horaria}h
+            </h4>
             <div className="turmas-list">
               {subject.turmas.map((turma) => (
-                <label key={turma.id_turma} className="turma-item">
-                  <input
-                    type="checkbox"
-                    checked={isTurmaSelected(turma, subject)}
-                    onChange={() => handleCheckboxChange(turma, subject)}
-                  />
-                  Turma: {turma.id_turma} | {turma.dia_semana} {turma.hora_inicio} -{" "}
-                  {turma.hora_fim} | Sala: {turma.Numero_Sala}
-                </label>
+                <div key={turma.id_turma} className="turma-item">
+                  <label>
+                    <input
+                      type="checkbox"
+                      checked={isTurmaSelected(turma, subject)}
+                      onChange={() => handleCheckboxChange(turma, subject)}
+                    />
+                    Turma: {turma.id_turma} | Sala: {turma.Numero_Sala}
+                  </label>
+                  <div className="horarios-list">
+                    <ul>
+                      {turma.horarios.map((horario, index) => (
+                        <li key={index}>
+                          {horario.dia_semana}: {horario.hora_inicio} - {horario.hora_fim}
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </div>
               ))}
             </div>
           </div>

@@ -28,7 +28,7 @@ function SimularMatricula() {
   const formatTurmasBySemester = (turmas) => {
     const groupedBySemester = {};
     turmas.forEach((turma) => {
-      const { semestre_disciplina, codigo_disciplina, nome_disciplina } = turma;
+      const { semestre_disciplina, codigo_disciplina, nome_disciplina, carga_horaria } = turma;
 
       if (!groupedBySemester[semestre_disciplina]) {
         groupedBySemester[semestre_disciplina] = [];
@@ -42,6 +42,7 @@ function SimularMatricula() {
         disciplina = {
           codigo: codigo_disciplina,
           nome: nome_disciplina,
+          carga_horaria: carga_horaria,
           turmas: [],
         };
         groupedBySemester[semestre_disciplina].push(disciplina);
@@ -57,12 +58,10 @@ function SimularMatricula() {
 
   const handleSelectionChange = (turmaSelecionada) => {
     setSelectedSubjects((prevSelected) => {
-      // Remove apenas turmas da mesma disciplina
       const updatedSubjects = prevSelected.filter(
         (s) => s.disciplina.codigo !== turmaSelecionada.disciplina.codigo
       );
   
-      // Adiciona a nova turma selecionada
       return [...updatedSubjects, turmaSelecionada];
     });
   };
@@ -80,6 +79,30 @@ function SimularMatricula() {
   const handlePreviousStep = () => {
     setCurrentStep((prevStep) => Math.max(prevStep - 1, 1));
   };
+
+  const handleConfirmMatricula = () => {
+    const alunoMatricula = matriculaAluno;
+  
+    const matriculas = selectedSubjects.map((subject) => ({
+      turma: subject.id_turma,
+      aluno: alunoMatricula,
+      situacao: "Matricula Solicitada",
+    }));
+  
+    axios
+      .post("http://localhost:3001/turmas-alunos", matriculas)
+      .then((response) => {
+        setSelectedSubjects((prevSubjects) =>
+          prevSubjects.map((subject) => ({
+            ...subject,
+            estadoSolicitacao: "Solicitada",
+          }))
+        );
+      })
+      .catch((error) => {
+        console.error("Erro ao confirmar matrícula:", error);
+      });
+  };  
 
   return (
     <div className="App">
@@ -135,13 +158,14 @@ function SimularMatricula() {
             </thead>
             <tbody>
               {selectedSubjects.map((subject) => (
-                <tr key={subject.codigo}>
-                  <td>{subject.nome}</td>
-                  <td>Não Solicitada</td>
+                <tr key={subject.id_turma}>
+                  <td>{subject.nome_disciplina}</td>
+                  <td>{subject.estadoSolicitacao || "Não Solicitada"}</td>
                 </tr>
               ))}
             </tbody>
           </table>
+          <button onClick={handleConfirmMatricula}>Confirmar Matrícula</button>
         </div>
       )}
 
