@@ -4,16 +4,15 @@ import Accordion from "../components/accordion/Accordion";
 import WeeklySchedule from "../components/WeeklySchedule/WeeklySchedule";
 import { FaArrowRight, FaArrowLeft } from "react-icons/fa";
 import axios from "axios";
-import "../App.css";
+import "./SimularMatricula.css"; 
 
 function SimularMatricula() {
   const [selectedSubjects, setSelectedSubjects] = useState([]);
-  const [currentStep, setCurrentStep] = useState(1); 
+  const [currentStep, setCurrentStep] = useState(1);
   const [currentDate, setCurrentDate] = useState(new Date());
   const [subjectsBySemester, setSubjectsBySemester] = useState({});
-  const [availableTurmas, setAvailableTurmas] = useState([]);
 
-  const matriculaAluno = '123';
+  const matriculaAluno = "123";
 
   useEffect(() => {
     axios
@@ -51,8 +50,6 @@ function SimularMatricula() {
       disciplina.turmas.push(turma);
     });
 
-    console.log(groupedBySemester)
-
     return groupedBySemester;
   };
 
@@ -61,7 +58,7 @@ function SimularMatricula() {
       const updatedSubjects = prevSelected.filter(
         (s) => s.disciplina.codigo !== turmaSelecionada.disciplina.codigo
       );
-  
+
       return [...updatedSubjects, turmaSelecionada];
     });
   };
@@ -81,17 +78,15 @@ function SimularMatricula() {
   };
 
   const handleConfirmMatricula = () => {
-    const alunoMatricula = matriculaAluno;
-  
     const matriculas = selectedSubjects.map((subject) => ({
       turma: subject.id_turma,
-      aluno: alunoMatricula,
+      aluno: matriculaAluno,
       situacao: "Matricula Solicitada",
     }));
-  
+
     axios
       .post("http://localhost:3001/turmas-alunos", matriculas)
-      .then((response) => {
+      .then(() => {
         setSelectedSubjects((prevSubjects) =>
           prevSubjects.map((subject) => ({
             ...subject,
@@ -102,7 +97,7 @@ function SimularMatricula() {
       .catch((error) => {
         console.error("Erro ao confirmar matrícula:", error);
       });
-  };  
+  };
 
   return (
     <div className="App">
@@ -114,6 +109,7 @@ function SimularMatricula() {
           <div className="dropboxes">
             {Object.entries(subjectsBySemester).map(([semester, subjects]) => (
               <Accordion
+                key={semester}
                 title={semester}
                 subjects={subjects}
                 onSelectionChange={handleSelectionChange}
@@ -165,19 +161,20 @@ function SimularMatricula() {
               ))}
             </tbody>
           </table>
-          <button onClick={handleConfirmMatricula}>Confirmar Matrícula</button>
+          <button className="next-button" onClick={handleConfirmMatricula}>
+            Confirmar Matrícula
+          </button>
         </div>
       )}
 
       <div className="navigation-buttons">
         {currentStep > 1 && (
-          <button onClick={handlePreviousStep}>
+          <button className="back-button" onClick={handlePreviousStep}>
             <FaArrowLeft /> Voltar
           </button>
         )}
-        <button onClick={handleNextStep}>
-          {currentStep === 3 ? "Confirmar Matrícula" : "Avançar"}{" "}
-          <FaArrowRight />
+        <button className="next-button" onClick={handleNextStep}>
+          {currentStep === 3 ? "Confirmar Matrícula" : "Avançar"} <FaArrowRight />
         </button>
       </div>
     </div>
